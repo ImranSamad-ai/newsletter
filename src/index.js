@@ -5,7 +5,7 @@ const subscriberRoute = require("./routes/subscriberRoute");
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // or use "*" to allow all
+    origin: "*", // or use "*" to allow all
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
