@@ -29,7 +29,7 @@ exports.login = async (req, res) => {
   if (!email || !password)
     res.status(401).json({ message: "password or email required" });
 
-  const user = await userModel.findOne({ email }).select("-password");
+  const user = await userModel.findOne({ email }).select("+password");
   if (!user) {
     res.send({ status: "failed" });
   }
