@@ -7,13 +7,12 @@ const contactRoute = require("./routes/contactRoute");
 const authRoute = require("./routes/authRoute");
 const blogRoute = require("./routes/blogRoute");
 
-app.use(
-  cors({
-    origin: "http://localhost:5173", // or use "*" to allow all
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: "http://localhost:5173", // <-- Add your frontend URL here
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use("/auth", authRoute);
