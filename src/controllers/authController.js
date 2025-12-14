@@ -26,23 +26,26 @@ exports.login = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  if (!email || !password) throw new Error("password or email required");
+  if (!email || !password)
+    res.status(401).json({ message: "password or email required" });
 
-  const user = await userModel.findOne({ email }).select("+password");
+  const user = await userModel.findOne({ email }).select("-password");
   if (!user) {
     res.send({ status: "failed" });
   }
   const isCorrectPassword = user.comparePassword(user.password, password);
 
   if (!isCorrectPassword) {
-    res.send("error ocured");
+    res.send("password is not correct");
   }
+  const userdata = await userModel.findOne({ email }).select("-password");
+
   const token = jwt.sign({ userId: user._id }, "secret_to_ti_leak", {
     expiresIn: "1hr",
   });
 
   res.json({
-    user,
+    userdata,
     token,
   });
 };
@@ -62,11 +65,11 @@ exports.protect = async (req, res, next) => {
 
     const freshUser = await userModel.findById(decoded.userId);
 
-    if (!freshUser) throw new Error("dumb user logged out");
+    if (!freshUser) res.status(401).json({ message: "dumb user logged out" });
 
     req.user = freshUser;
+    next();
   } catch (error) {
-    console.log(error);
+    return res.status(401).json({ message: "Invalid token" });
   }
-  next();
 };
