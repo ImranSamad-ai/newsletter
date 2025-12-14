@@ -31,7 +31,7 @@ exports.login = async (req, res) => {
 
   const user = await userModel.findOne({ email }).select("+password");
   if (!user) {
-    res.send({ status: "failed" });
+    res.send({ status: 400, message: "user not found" });
   }
   const isCorrectPassword = user.comparePassword(user.password, password);
 
