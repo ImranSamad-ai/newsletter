@@ -9,7 +9,7 @@ const blogRoute = require("./routes/blogRoute");
 
 app.use(
   cors({
-    origin: "*", // or use "*" to allow all
+    origin: "http://localhost:5173", // or use "*" to allow all
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
