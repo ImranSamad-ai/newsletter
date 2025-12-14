@@ -41,7 +41,10 @@ exports.login = async (req, res) => {
     expiresIn: "1hr",
   });
 
-  res.json(token);
+  res.json({
+    user,
+    token,
+  });
 };
 
 exports.protect = async (req, res, next) => {

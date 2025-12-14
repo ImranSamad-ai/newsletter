@@ -9,7 +9,7 @@ const blogRoute = require("./routes/blogRoute");
 
 app.use(
   cors({
-    origin: "*", // or use "*" to allow all
+    origin: "", // or use "*" to allow all
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
