@@ -19,7 +19,7 @@ exports.signUp = async (req, res) => {
     algorithm: "HS256", // Using HMAC SHA256
   });
 
-  res.status(200).json(token);
+  res.json({ statusCode: 200, token });
 };
 
 exports.login = async (req, res) => {
@@ -27,16 +27,20 @@ exports.login = async (req, res) => {
   const password = req.body.password;
 
   if (!email || !password)
-    res.status(401).json({ message: "password or email required" });
+    res
+      .status(401)
+      .json({ statusCode: 401, message: "password or email required" });
 
   const user = await userModel.findOne({ email }).select("+password");
   if (!user) {
-    res.send({ status: 400, message: "user not found" });
+    return res.status(400).json({ statusCode: 400, message: "user not found" });
   }
   const isCorrectPassword = user.comparePassword(user.password, password);
 
   if (!isCorrectPassword) {
-    res.send("password is not correct");
+    res
+      .status(401)
+      .json({ statusCode: 401, message: "password is not correct" });
   }
   const userdata = await userModel.findOne({ email }).select("-password");
 
@@ -70,6 +74,6 @@ exports.protect = async (req, res, next) => {
     req.user = freshUser;
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
+    return res.json({ message: "Invalid token" });
   }
 };

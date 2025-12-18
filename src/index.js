@@ -8,7 +8,7 @@ const authRoute = require("./routes/authRoute");
 const blogRoute = require("./routes/blogRoute");
 
 const corsOptions = {
-  origin: "http://localhost:5173", // <-- Add your frontend URL here
+  origin: "*", //"http://localhost:5173", // <-- Add your frontend URL here
   optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 

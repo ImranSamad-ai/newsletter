@@ -7,22 +7,53 @@ const contactSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    name: { type: String, required: true },
+
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
     company: String,
     role: String,
+
     email: {
       type: String,
-      unique: true,
+      required: true,
+      lowercase: true,
+      trim: true,
     },
+
     phone: {
       type: String,
-      unique: true,
+      trim: true,
     },
-    notes: String,
-    tags: [String],
-    lastInteracted: Date,
+
+    photo: {
+      type: String, // ❌ NOT UNIQUE
+    },
+
+    notes: [String],
+    priority: String,
+    lastInteracted: [Date],
   },
   { timestamps: true }
+);
+
+//
+// ✅ Compound unique index (email per user)
+//
+contactSchema.index({ user: 1, email: 1 }, { unique: true });
+
+//
+// ✅ Optional phone, unique per user ONLY if present
+//
+contactSchema.index(
+  { user: 1, phone: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { phone: { $exists: true, $ne: null } },
+  }
 );
 
 const contact = mongoose.model("contact", contactSchema);

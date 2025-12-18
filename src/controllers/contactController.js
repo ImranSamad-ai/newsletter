@@ -1,4 +1,31 @@
 const contact = require("../models/Contact");
+const multer = require("multer");
+const AppError = require("../utils/AppError");
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/img/contacts");
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split("/")[1];
+    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+  },
+});
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new AppError("Not an image please upload only images!", 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.UploadContactPhoto = upload.single("photo");
 
 exports.createContact = async (req, res) => {
   const { name, company, email, phone, notes } = req.body;
@@ -13,6 +40,9 @@ exports.createContact = async (req, res) => {
   });
 
   const populated = await newContact.populate("user");
+  if (req.file) {
+    populated.photo = req.file.filename;
+  }
   res.send(populated);
 };
 exports.getContact = async (req, res) => {
