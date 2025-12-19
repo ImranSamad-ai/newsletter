@@ -74,6 +74,6 @@ exports.protect = async (req, res, next) => {
     req.user = freshUser;
     next();
   } catch (error) {
-    return res.json({ message: "Invalid token" });
+    return res.json({ message: error });
   }
 };
