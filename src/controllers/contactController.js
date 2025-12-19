@@ -29,11 +29,11 @@ exports.UploadContactPhoto = upload.single("photo");
 
 exports.createContact = async (req, res) => {
   let notes = [];
-  const { name, company, email, phone, note } = req.body;
+  const { fullName, company, email, phone, note } = req.body;
   notes.push(note);
   const newContact = await contact.create({
     user: req.user._id,
-    name,
+    fullName,
     company,
     email,
     phone,
