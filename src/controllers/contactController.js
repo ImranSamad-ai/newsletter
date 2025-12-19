@@ -28,15 +28,16 @@ const upload = multer({
 exports.UploadContactPhoto = upload.single("photo");
 
 exports.createContact = async (req, res) => {
-  const { name, company, email, phone, notes } = req.body;
-
+  let notes = [];
+  const { name, company, email, phone, note } = req.body;
+  notes.push(note);
   const newContact = await contact.create({
     user: req.user._id,
     name,
     company,
     email,
     phone,
-    notes,
+    notes: notes,
   });
 
   const populated = await newContact.populate("user");
