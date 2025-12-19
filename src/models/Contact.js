@@ -8,7 +8,7 @@ const contactSchema = new mongoose.Schema(
       required: true,
     },
 
-    name: {
+    fullName: {
       type: String,
       required: true,
       trim: true,
