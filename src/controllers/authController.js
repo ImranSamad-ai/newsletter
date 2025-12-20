@@ -11,47 +11,57 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signUp = async (req, res) => {
-  const { fullName, email, password } = req.body;
-  const newUser = await userModel.create({ fullName, email, password });
+  try {
+    const { fullName, email, password } = req.body;
+    const newUser = await userModel.create({ fullName, email, password });
 
-  const token = jwt.sign({ id: newUser._id }, "secret_to_ti_leak", {
-    expiresIn: "1h", // Token expires in 1 hour
-    algorithm: "HS256", // Using HMAC SHA256
-  });
+    const token = jwt.sign({ id: newUser._id }, "secret_to_ti_leak", {
+      expiresIn: "1h", // Token expires in 1 hour
+      algorithm: "HS256", // Using HMAC SHA256
+    });
 
-  res.json({ statusCode: 200, token });
+    res.json({ statusCode: 200, token });
+  } catch (error) {
+    res.send(error);
+  }
 };
 
 exports.login = async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
 
-  if (!email || !password)
-    res
-      .status(401)
-      .json({ statusCode: 401, message: "password or email required" });
+    if (!email || !password)
+      res
+        .status(401)
+        .json({ statusCode: 401, message: "password or email required" });
 
-  const user = await userModel.findOne({ email }).select("+password");
-  if (!user) {
-    return res.status(400).json({ statusCode: 400, message: "user not found" });
+    const user = await userModel.findOne({ email }).select("+password");
+    if (!user) {
+      return res
+        .status(400)
+        .json({ statusCode: 400, message: "user not found" });
+    }
+    const isCorrectPassword = user.comparePassword(user.password, password);
+
+    if (!isCorrectPassword) {
+      res
+        .status(401)
+        .json({ statusCode: 401, message: "password is not correct" });
+    }
+    const userdata = await userModel.findOne({ email }).select("-password");
+
+    const token = jwt.sign({ userId: user._id }, "secret_to_ti_leak", {
+      expiresIn: "1hr",
+    });
+
+    res.json({
+      userdata,
+      token,
+    });
+  } catch (error) {
+    res.send(error);
   }
-  const isCorrectPassword = user.comparePassword(user.password, password);
-
-  if (!isCorrectPassword) {
-    res
-      .status(401)
-      .json({ statusCode: 401, message: "password is not correct" });
-  }
-  const userdata = await userModel.findOne({ email }).select("-password");
-
-  const token = jwt.sign({ userId: user._id }, "secret_to_ti_leak", {
-    expiresIn: "1hr",
-  });
-
-  res.json({
-    userdata,
-    token,
-  });
 };
 
 exports.protect = async (req, res, next) => {
