@@ -5,7 +5,7 @@ exports.createReminder = async (req, res) => {
     const { priority, completed, remindAt, message, title, channel, contact } =
       await req.body;
 
-    const newReminder = reminderModel.create({
+    const newReminder = await reminderModel.create({
       priority,
       completed,
       remindAt,
