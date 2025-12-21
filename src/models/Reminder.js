@@ -11,11 +11,15 @@ const reminderSchema = new mongoose.Schema({
     ref: "Contact",
     required: true,
   },
+  title: {
+    type: String,
+    required: true,
+  },
   message: {
     type: String,
     required: true,
   },
-  dueDate: {
+  remindAt: {
     type: Date,
     required: true,
   },
