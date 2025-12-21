@@ -2,15 +2,8 @@ const reminderModel = require("../models/Reminder");
 
 exports.createReminder = async (req, res) => {
   try {
-    const {
-      priority,
-      completed,
-      remindAt,
-      message,
-      title,
-      channel,
-      selectedContact: contact,
-    } = await req.body;
+    const { priority, completed, remindAt, message, title, channel, contact } =
+      await req.body;
 
     const newReminder = reminderModel.create({
       priority,
