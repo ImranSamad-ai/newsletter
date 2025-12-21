@@ -4,7 +4,7 @@ const multer = require("multer");
 const upload = multer({ dest: "public/img/contacts" });
 const {
   createContact,
-
+  getAllContacts,
   getAsingleContact,
   updateContact,
   getAllContactsForAUser,
@@ -18,4 +18,5 @@ router
 router.get("/:id", getAsingleContact);
 router.patch("/:id", updateContact);
 
+router.route("/contact").get(getAllContacts);
 module.exports = router;

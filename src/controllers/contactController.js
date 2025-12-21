@@ -46,10 +46,17 @@ exports.createContact = async (req, res) => {
   }
   res.send(populated);
 };
-exports.getContact = async (req, res) => {
-  const contacts = await contact.find();
+exports.getAllContacts = async (req, res) => {
+ try {
+   const contacts = await contact.find();
+   res.status(200).json({
+    status: 200,
+    message: "succesfully created",
+    contacts});
+} catch (error) {
+  throw new Error("couldnt create contac");
+  
 
-  res.send(contacts);
 };
 exports.getAsingleContact = async (req, res) => {
   const id = req.params.id;
