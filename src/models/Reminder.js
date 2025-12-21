@@ -24,7 +24,7 @@ const reminderSchema = new mongoose.Schema({
     required: true,
   },
   remindAt: {
-    type: Date,
+    type: String,
     required: true,
   },
   completed: {

@@ -5,7 +5,6 @@ exports.createReminder = async (req, res) => {
   try {
     const newReminder = await reminderModel.create({
       priority: req.body.priority,
-      completed: req.body.remindAt,
       remindAt: req.body.remindAt,
       message: req.body.message,
       title: req.body.title,
