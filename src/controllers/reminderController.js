@@ -18,3 +18,17 @@ exports.createReminder = async (req, res) => {
     res.status(401).json({ data: error, message: "failed" });
   }
 };
+
+exports.getReminders = async (req, res) => {
+  try {
+    const user = req.user._id;
+    const reminders = await reminderModel.find({ user });
+
+    res.status(200).json({
+      reminders,
+      message: "Contact reminder",
+    });
+  } catch (error) {
+    res.status(400).json({ message: "failed", error });
+  }
+};
