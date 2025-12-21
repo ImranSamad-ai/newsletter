@@ -6,6 +6,7 @@ const globalErrorHandler = require("./controllers/errorController");
 const contactRoute = require("./routes/contactRoute");
 const authRoute = require("./routes/authRoute");
 const blogRoute = require("./routes/blogRoute");
+const reminderRoute = require("./routes/reminderRoute");
 
 const corsOptions = {
   origin: "*", //"http://localhost:5173", // <-- Add your frontend URL here
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use("/auth", authRoute);
 app.use("/blog", blogRoute);
 app.use("/contact", contactRoute);
+app.use("/reminder", reminderRoute);
 
 app.all("/contact", (req, res, next) => {
   next(AppError(`cannot find the ${req.baseUrl} on the server.`, 404));

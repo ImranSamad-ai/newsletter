@@ -18,5 +18,4 @@ router
 router.get("/:id", getAsingleContact);
 router.patch("/:id", updateContact);
 
-router.route("/contact").get(getAllContacts);
 module.exports = router;

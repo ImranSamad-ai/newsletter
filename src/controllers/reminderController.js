@@ -1,15 +1,29 @@
 const reminderModel = require("../models/Reminder");
 
 exports.createReminder = async (req, res) => {
-  const { priority, completed, remindAt, message, title } = await req.body;
+  try {
+    const {
+      priority,
+      completed,
+      remindAt,
+      message,
+      title,
+      channel,
+      selectedContact: contact,
+    } = await req.body;
 
-  const newReminder = reminderModel.create({
-    priority,
-    completed,
-    remindAt,
-    message,
-    title,
-  });
+    const newReminder = reminderModel.create({
+      priority,
+      completed,
+      remindAt,
+      message,
+      title,
+      channel,
+      contact,
+    });
 
-  res.send(newReminder);
+    res.status(200).json({ data: newReminder, message: "successful" });
+  } catch (error) {
+    res.status(401).json({ data: error, message: "failed" });
+  }
 };

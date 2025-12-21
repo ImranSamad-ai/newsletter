@@ -19,6 +19,10 @@ const reminderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  channel: {
+    type: String,
+    required: true,
+  },
   remindAt: {
     type: Date,
     required: true,
