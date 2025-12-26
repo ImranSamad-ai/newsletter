@@ -43,7 +43,7 @@ exports.createContact = async (req, res) => {
     photo: req?.file?.filename,
   });
 
-  res.send(req.file);
+  res.send(req);
 };
 exports.getAllContacts = async (req, res) => {
   try {
