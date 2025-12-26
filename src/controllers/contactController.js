@@ -31,6 +31,7 @@ exports.createContact = async (req, res) => {
   let notes = [];
   const { fullName, company, email, phone, priority, note, role } = req.body;
   notes.push(note);
+  console.log(req.file);
   const newContact = await contact.create({
     user: req.user._id,
     fullName,
@@ -43,7 +44,7 @@ exports.createContact = async (req, res) => {
     photo: req?.file?.filename,
   });
 
-  res.send(req);
+  res.send({ data: newContact, photo: req?.file?.filename });
 };
 exports.getAllContacts = async (req, res) => {
   try {
