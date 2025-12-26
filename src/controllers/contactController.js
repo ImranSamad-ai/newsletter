@@ -33,7 +33,7 @@ exports.createContact = async (req, res) => {
     req.body;
   notes.push(note);
   console.log(req.file);
-  const pikis = await req.file.filename;
+  const pikis = await req?.file[0]?.filename;
   const newContact = await contact.create({
     user: req.user._id,
     fullName,
