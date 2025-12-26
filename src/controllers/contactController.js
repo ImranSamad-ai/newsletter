@@ -29,7 +29,7 @@ exports.UploadContactPhoto = upload.single("photo");
 
 exports.createContact = async (req, res) => {
   let notes = [];
-  const { fullName, company, email, phone, note } = req.body;
+  const { fullName, company, email, phone, note, role } = req.body;
   notes.push(note);
   const newContact = await contact.create({
     user: req.user._id,
@@ -91,13 +91,27 @@ exports.updateContact = async (req, res) => {
 
 exports.getAllContactsForAUser = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const skip = (page - 1) * limit;
+
+    const totalContacts = await contact.countDocuments({
+      user: req.user.id,
+    });
+
     const user = await req.user._id;
-    const usercontacts = await contact.find({ user });
+    const usercontacts = await contact
+      .find({ user })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
     // console.log(user);
-    console.log(usercontacts);
     res.status(200).json({
       data: usercontacts,
       message: "These are the user contacts fam",
+      currentPage: page,
+      totalPages: Math.ceil(totalContacts / limit),
     });
   } catch (error) {
     res.send(error);
