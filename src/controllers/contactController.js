@@ -29,11 +29,11 @@ exports.UploadContactPhoto = upload.single("photo");
 
 exports.createContact = async (req, res) => {
   let notes = [];
-  const { fullName, company, email, phone, priority, photo, note, role } =
-    req.body;
+  const { fullName, company, email, phone, priority, note, role } = req.body;
   notes.push(note);
-  console.log(req.file);
-  const pikis = await req?.file[0]?.filename;
+
+  const photo = await req?.file?.filename;
+
   const newContact = await contact.create({
     user: req.user._id,
     fullName,
@@ -46,7 +46,7 @@ exports.createContact = async (req, res) => {
     photo,
   });
 
-  res.send({ data: newContact, photo: pikis });
+  res.send({ data: newContact, photo: photo, message: "im tired bro" });
 };
 exports.getAllContacts = async (req, res) => {
   try {
