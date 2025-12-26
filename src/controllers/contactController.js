@@ -40,10 +40,10 @@ exports.createContact = async (req, res) => {
     priority,
     role,
     notes: notes,
-    photo: req.file.filename,
+    photo: req?.file?.filename,
   });
 
-  res.send(newContact);
+  res.send(req.file);
 };
 exports.getAllContacts = async (req, res) => {
   try {
