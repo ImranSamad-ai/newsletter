@@ -31,7 +31,6 @@ const contactSchema = new mongoose.Schema(
 
     photo: {
       type: String,
-      required: true,
     },
 
     notes: [String],
