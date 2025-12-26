@@ -37,14 +37,12 @@ exports.createContact = async (req, res) => {
     company,
     email,
     phone,
+    role,
     notes: notes,
+    photo: req.file.filename,
   });
 
-  const populated = await newContact.populate("user");
-  if (req.file) {
-    populated.photo = req.file.filename;
-  }
-  res.send(populated);
+  res.send(newContact);
 };
 exports.getAllContacts = async (req, res) => {
   try {

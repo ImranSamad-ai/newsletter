@@ -30,7 +30,7 @@ const contactSchema = new mongoose.Schema(
     },
 
     photo: {
-      type: String, // ❌ NOT UNIQUE
+      type: String,
     },
 
     notes: [String],
