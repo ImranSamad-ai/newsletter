@@ -33,7 +33,7 @@ exports.createContact = async (req, res) => {
   const { fullName, company, email, phone, priority, note, role } = req.body;
   notes.push(note);
 
-  const photo = `/${req.file.filename}`;
+  const photo = await req.file.filename;
 
   const newContact = await contact.create({
     user: req.user._id,
