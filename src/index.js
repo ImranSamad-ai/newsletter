@@ -11,6 +11,7 @@ const path = require("path");
 const corsOptions = {
   origin: "*", //"http://localhost:5173", // <-- Add your frontend URL here
   optionsSuccessStatus: 200,
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
