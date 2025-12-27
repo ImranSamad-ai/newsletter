@@ -28,29 +28,36 @@ const upload = multer({
 exports.UploadContactPhoto = upload.single("photo");
 
 exports.createContact = async (req, res) => {
-  console.log(req.file);
-  let notes = [];
-  const { fullName, company, email, phone, priority, note, role } = req.body;
-  notes.push(note);
+  try {
+    console.log(req.file);
+    let notes = [];
+    const { fullName, company, email, phone, priority, note, role } = req.body;
+    notes.push(note);
 
-  const photo = await req.file.filename;
+    const photo = await req.file.filename;
 
-  const newContact = await contact.create({
-    user: req.user._id,
-    fullName,
-    company,
-    email,
-    phone,
-    priority,
-    role,
-    notes: notes,
-    photo,
-  });
+    const newContact = await contact.create({
+      user: req.user._id,
+      fullName,
+      company,
+      email,
+      phone,
+      priority,
+      role,
+      notes: notes,
+      photo,
+    });
 
-  res.send({
-    data: newContact,
-    message: "im tired bro",
-  });
+    res.send({
+      data: newContact,
+      message: "im tired bro",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: error,
+      message: error.message,
+    });
+  }
 };
 exports.getAllContacts = async (req, res) => {
   try {
