@@ -28,11 +28,12 @@ const upload = multer({
 exports.UploadContactPhoto = upload.single("photo");
 
 exports.createContact = async (req, res) => {
+  console.log(req.file);
   let notes = [];
   const { fullName, company, email, phone, priority, note, role } = req.body;
   notes.push(note);
 
-  const photo = req.file ? `/uploads/${req.file.filename}` : null;
+  const photo = `/${req.file.filename}`;
 
   const newContact = await contact.create({
     user: req.user._id,

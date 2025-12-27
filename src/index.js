@@ -15,7 +15,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use("/uploads", express.static("public/img/contacts"));
 app.use(express.json());
 app.use("/auth", authRoute);
 app.use("/blog", blogRoute);
