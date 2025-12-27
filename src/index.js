@@ -15,12 +15,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use("/auth", authRoute);
 app.use("/blog", blogRoute);
 app.use("/contact", contactRoute);
 app.use("/reminder", reminderRoute);
-app.use("/uploads", express.static("uploads"));
 
 app.all("/contact", (req, res, next) => {
   next(AppError(`cannot find the ${req.baseUrl} on the server.`, 404));
