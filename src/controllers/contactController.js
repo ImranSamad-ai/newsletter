@@ -1,14 +1,11 @@
 const contact = require("../models/Contact");
-const multer = require("multer");
 const AppError = require("../utils/AppError");
+const cloudinary = require("../utils/cloudinary");
+const multer = require("multer");
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/img/contacts");
-  },
-  filename: (req, file, cb) => {
-    const ext = file.mimetype.split("/")[1];
-    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
   },
 });
 
@@ -24,18 +21,23 @@ const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
 });
-
 exports.UploadContactPhoto = upload.single("photo");
 
 exports.createContact = async (req, res) => {
   try {
-    console.log(req.file);
     let notes = [];
     const { fullName, company, email, phone, priority, note, role } = req.body;
     notes.push(note);
 
     const photo = await req?.file?.filename;
 
+    const uploadedImage = await cloudinary.uploader.upload(
+      req.file.path,
+      function (err, result) {
+        if (err) return err;
+        return result;
+      }
+    );
     const newContact = await contact.create({
       user: req.user._id,
       fullName,
@@ -45,7 +47,7 @@ exports.createContact = async (req, res) => {
       priority,
       role,
       notes: notes,
-      photo,
+      photo: uploadedImage.secure_url,
     });
 
     res.send({

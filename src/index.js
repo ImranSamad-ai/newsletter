@@ -7,7 +7,6 @@ const contactRoute = require("./routes/contactRoute");
 const authRoute = require("./routes/authRoute");
 const blogRoute = require("./routes/blogRoute");
 const reminderRoute = require("./routes/reminderRoute");
-const path = require("path");
 const corsOptions = {
   origin: "*", //"http://localhost:5173", // <-- Add your frontend URL here
   optionsSuccessStatus: 200,
@@ -16,7 +15,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use("/uploads", express.static("public/img/contacts"));
 app.use(express.json());
 app.use("/auth", authRoute);
 app.use("/blog", blogRoute);
