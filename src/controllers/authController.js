@@ -15,7 +15,7 @@ exports.signUp = async (req, res) => {
     const { fullName, email, password } = req.body;
     const newUser = await userModel.create({ fullName, email, password });
 
-    const token = jwt.sign({ id: newUser._id }, "secret_to_ti_leak", {
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1h", // Token expires in 1 hour
       algorithm: "HS256", // Using HMAC SHA256
     });
@@ -51,7 +51,7 @@ exports.login = async (req, res) => {
     }
     const userdata = await userModel.findOne({ email }).select("-password");
 
-    const token = jwt.sign({ userId: user._id }, "secret_to_ti_leak", {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1hr",
     });
 
@@ -75,7 +75,7 @@ exports.protect = async (req, res, next) => {
     }
     if (token === null) return res.send("401 eror");
 
-    const decoded = await promisify(jwt.verify)(token, "secret_to_ti_leak");
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
     const freshUser = await userModel.findById(decoded.userId);
 
