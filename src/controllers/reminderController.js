@@ -57,21 +57,42 @@ exports.editReminder = async (req, res) => {
     res.status(400).json({ message: "failed", error });
   }
 };
-exports.done = async (req, res) => {
-  try {
-    const id = req.body.id;
 
-    const reminder = await reminderModel.findByIdAndUpdate(
-      id,
-      { completed: req.body.completed },
-      { new: true }
-    );
+exports.updateReminder = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const reminder = await reminderModel.findOne({
+      _id: req.params.id,
+      user: req.user.id, // security
+    });
+
+    if (!reminder) {
+      return next(new AppError("Reminder not found", 404));
+    }
+
+    // Allowed fields to update
+    const allowedUpdates = [
+      "title",
+      "note",
+      "remindAt",
+      "priority",
+      "completed",
+      "contact",
+    ];
+
+    allowedUpdates.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        reminder[field] = req.body[field];
+      }
+    });
+
+    await reminder.save();
 
     res.status(200).json({
-      reminders,
-      message: "Contact reminder",
+      status: "success",
+      data: reminder,
     });
-  } catch (error) {
-    res.status(400).json({ message: "failed" });
+  } catch (err) {
+    next(err);
   }
 };

@@ -4,15 +4,12 @@ const { protect } = require("../controllers/authController");
 const {
   createReminder,
   getReminders,
-  done,
-  editReminder,
+  updateReminder,
 } = require("../controllers/reminderController");
 
-router
-  .route("/")
-  .post(protect, createReminder)
-  .get(protect, getReminders)
-  .patch(protect, editReminder);
+router.route("/").post(protect, createReminder).get(protect, getReminders);
 
-router.patch("/completed", protect, done);
+router.patch("/:id", protect, updateReminder);
+
+// router.patch("completed/:id", protect, done);
 module.exports = router;
