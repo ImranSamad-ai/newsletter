@@ -11,6 +11,7 @@ exports.createReminder = async (req, res) => {
       channel: req.body.channel,
       contact: req.body.contact,
       user: req.body.user,
+      fullName: req.body.fullName,
     });
 
     res.status(200).json({ data: newReminder, message: "successful" });
