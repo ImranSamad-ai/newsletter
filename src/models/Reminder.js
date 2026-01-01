@@ -27,6 +27,7 @@ const reminderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  fullName: String,
   completed: {
     type: Boolean,
     default: false,

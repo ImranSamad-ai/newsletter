@@ -74,10 +74,13 @@ exports.getAllContacts = async (req, res) => {
   }
 };
 exports.getAsingleContact = async (req, res) => {
-  const id = req.params.id;
-  const contac = await contact.findById({ _id: id });
-
-  res.send(contac);
+  try {
+    const id = req.params.id;
+    const contac = await contact.findById({ _id: id });
+    res.status(200).json({ data: contac });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 };
 
 exports.updateContact = async (req, res) => {
