@@ -51,8 +51,8 @@ exports.login = async (req, res) => {
     }
     const userdata = await userModel.findOne({ email }).select("-password");
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1hr",
+    const token = jwt.sign({ userId: user._id }, "juytreueiejsijiodjdsmld", {
+      expiresIn: "2hr",
     });
 
     res.json({
