@@ -58,7 +58,7 @@ exports.editReminder = async (req, res) => {
   }
 };
 
-exports.updateReminder = async (req, res, next) => {
+exports.updateReminder = async (req, res) => {
   try {
     console.log(req.body);
     const reminder = await reminderModel.findOne({
@@ -67,7 +67,7 @@ exports.updateReminder = async (req, res, next) => {
     });
 
     if (!reminder) {
-      return next(new AppError("Reminder not found", 404));
+      return new AppError("Reminder not found", 404);
     }
 
     // Allowed fields to update
@@ -91,8 +91,9 @@ exports.updateReminder = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       data: reminder,
+      request: req.body,
     });
   } catch (err) {
-    next(err);
+    res.status(400).json({ err, request: req.body });
   }
 };
