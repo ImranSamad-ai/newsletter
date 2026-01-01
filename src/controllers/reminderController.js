@@ -60,7 +60,7 @@ exports.editReminder = async (req, res) => {
 
 exports.updateReminder = async (req, res) => {
   try {
-    console.log(req.body);
+    console.log(req);
     const reminder = await reminderModel.findOne({
       _id: req.params.id,
       user: req.user.id, // security
@@ -94,6 +94,6 @@ exports.updateReminder = async (req, res) => {
       request: req.body,
     });
   } catch (err) {
-    res.status(400).json({ err, request: req.body });
+    res.status(400).json({ erro: err, request: req.body });
   }
 };
