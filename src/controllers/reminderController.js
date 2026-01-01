@@ -59,10 +59,10 @@ exports.editReminder = async (req, res) => {
 };
 exports.done = async (req, res) => {
   try {
-    const user = req.body._id;
+    const id = req.body.id;
 
-    const reminders = await reminderModel.findByIdAndUpdate(
-      user,
+    const reminder = await reminderModel.findByIdAndUpdate(
+      id,
       { completed: req.body.completed },
       { new: true }
     );
@@ -72,6 +72,6 @@ exports.done = async (req, res) => {
       message: "Contact reminder",
     });
   } catch (error) {
-    res.status(400).json({ message: "failed", error });
+    res.status(400).json({ message: "failed" });
   }
 };
