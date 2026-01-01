@@ -75,7 +75,10 @@ exports.protect = async (req, res, next) => {
     }
     if (token === null) return res.send("401 eror");
 
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    const decoded = await promisify(jwt.verify)(
+      token,
+      "juytreueiejsijiodjdsmld"
+    );
 
     const freshUser = await userModel.findById(decoded.userId);
 

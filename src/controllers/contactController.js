@@ -109,7 +109,6 @@ exports.getAllContactsForAUser = async (req, res) => {
     const user = await req.user._id;
     const usercontacts = await contact.find({ user });
 
-    // console.log(user);
     res.status(200).json({
       data: usercontacts,
       message: "These are the user contacts fam",
