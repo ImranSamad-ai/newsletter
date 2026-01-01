@@ -93,7 +93,6 @@ exports.protect = async (req, res, next) => {
     if (!freshUser) res.status(401).json({ message: "dumb user logged out" });
 
     req.user = freshUser;
-    res.send(freshUser);
     next();
   } catch (error) {
     return res.json({ message: error });
