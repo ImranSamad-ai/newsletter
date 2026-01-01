@@ -15,10 +15,14 @@ exports.signUp = async (req, res) => {
     const { fullName, email, password } = req.body;
     const newUser = await userModel.create({ fullName, email, password });
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h", // Token expires in 1 hour
-      algorithm: "HS256", // Using HMAC SHA256
-    });
+    const token = jwt.sign(
+      { id: newUser._id },
+      "super_secret_key_from_Imran_FIRST_k07",
+      {
+        expiresIn: "1h", // Token expires in 1 hour
+        algorithm: "HS256", // Using HMAC SHA256
+      }
+    );
 
     res.json({ statusCode: 200, token });
   } catch (error) {
@@ -51,9 +55,13 @@ exports.login = async (req, res) => {
     }
     const userdata = await userModel.findOne({ email }).select("-password");
 
-    const token = jwt.sign({ userId: user._id }, "juytreueiejsijiodjdsmld", {
-      expiresIn: "2hr",
-    });
+    const token = jwt.sign(
+      { userId: user._id },
+      "super_secret_key_from_Imran_FIRST_k07",
+      {
+        expiresIn: "2hr",
+      }
+    );
 
     res.json({
       userdata,
@@ -77,7 +85,7 @@ exports.protect = async (req, res, next) => {
 
     const decoded = await promisify(jwt.verify)(
       token,
-      "juytreueiejsijiodjdsmld"
+      "super_secret_key_from_Imran_FIRST_k07"
     );
 
     const freshUser = await userModel.findById(decoded.userId);
