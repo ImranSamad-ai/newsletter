@@ -79,6 +79,7 @@ exports.updateReminder = async (req, res) => {
       "priority",
       "completed",
       "contact",
+      "channel",
     ];
 
     allowedUpdates.forEach((field) => {

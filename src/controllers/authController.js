@@ -98,3 +98,8 @@ exports.protect = async (req, res, next) => {
     return res.json({ message: error });
   }
 };
+exports.getAUser = async (req, res) => {
+  const id = req.user._id;
+  const userS = await userModel.findById(id);
+  res.send(userS);
+};
