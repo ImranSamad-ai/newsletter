@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
 const userModel = require("../models/user");
 const { promisify } = require("util");
 
@@ -46,13 +48,15 @@ exports.login = async (req, res) => {
         .status(400)
         .json({ statusCode: 400, message: "user not found" });
     }
-    const isCorrectPassword = user.comparePassword(user.password, password);
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
+    console.log(isCorrectPassword);
 
     if (!isCorrectPassword) {
       res
         .status(401)
         .json({ statusCode: 401, message: "password is not correct" });
     }
+
     const userdata = await userModel.findOne({ email }).select("-password");
 
     const token = jwt.sign(
@@ -62,13 +66,13 @@ exports.login = async (req, res) => {
         expiresIn: "2hr",
       }
     );
-
+    user.password = undefined;
     res.json({
       userdata,
       token,
     });
   } catch (error) {
-    res.send(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
