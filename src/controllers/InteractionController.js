@@ -37,7 +37,7 @@ app.post("/schedule-push", (req, res) => {
   console.log(`Notification scheduled for: ${time}`);
 
   // The Magic: This triggers the push at the exact 'time' selected
-  schedule.scheduleJob(new Date("2026-01-10T23:03:58.614Z"), function () {
+  schedule.scheduleJob(new Date(time), function () {
     const payload = JSON.stringify({ title: "Reminder", body: message });
 
     webpush
