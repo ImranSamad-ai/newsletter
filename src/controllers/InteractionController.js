@@ -27,27 +27,59 @@ app.post("/subscribe", (req, res) => {
 });
 
 // 2. Route to schedule a notification
-app.post("/schedule-push", (req, res) => {
-  const { time, message } = req.body; // 'time' should be a JS Date string
 
-  if (!userSubscription) {
-    return res.status(400).json({ error: "No user subscribed yet." });
+app.post(
+  async function scheduleMyNotification() {
+    const selectedTime = document.getElementById("timePicker").value; // e.g., "2026-01-10T22:00:00"
+
+    await fetch("/schedule-push", {
+      method: "POST",
+      body: JSON.stringify({
+        time: selectedTime,
+        message: "It's time for your task!",
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+    alert("Notification Scheduled!");
+  },
+  (req, res) => {
+    const { time, message } = req.body; // 'time' should be a JS Date string
+
+    if (!userSubscription) {
+      return res.status(400).json({ error: "No user subscribed yet." });
+    }
+
+    console.log(`Notification scheduled for: ${time}`);
+
+    // The Magic: This triggers the push at the exact 'time' selected
+    schedule.scheduleJob(new Date(time), function () {
+      const payload = JSON.stringify({ title: "Reminder", body: message });
+
+      webpush
+        .sendNotification(userSubscription, payload)
+        .catch((err) => console.error("Push Error:", err));
+
+      console.log("Push notification sent!");
+    });
+
+    res.json({ success: true, info: `Scheduled for ${time}` });
   }
-
-  console.log(`Notification scheduled for: ${time}`);
-
-  // The Magic: This triggers the push at the exact 'time' selected
-  schedule.scheduleJob(new Date(time), function () {
-    const payload = JSON.stringify({ title: "Reminder", body: message });
-
-    webpush
-      .sendNotification(userSubscription, payload)
-      .catch((err) => console.error("Push Error:", err));
-
-    console.log("Push notification sent!");
-  });
-
-  res.json({ success: true, info: `Scheduled for ${time}` });
-});
+);
 
 app.listen(3000, () => console.log("Server started on port 3000"));
+
+const scheduleReminder = (req, res) => {
+  async function scheduleMyNotification() {
+    const appointmentTime = req.body.appointmentTime;
+
+    await fetch("/schedule-push", {
+      method: "POST",
+      body: JSON.stringify({
+        time: appointmentTime,
+        message: "It's time for your task!",
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+    alert("Notification Scheduled!");
+  }
+};

@@ -21,6 +21,10 @@ const corsOptions = {
   credentials: true,
 };
 
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.use(express.json());
+
 // /////////////////////
 
 // REPLACE THESE with the keys you generated
@@ -54,7 +58,7 @@ app.post("/schedule-push", (req, res) => {
   console.log(`Notification scheduled for: ${time}`);
 
   // The Magic: This triggers the push at the exact 'time' selected
-  schedule.scheduleJob(new Date("2026-01-10T23:03:58.614Z"), function () {
+  schedule.scheduleJob(new Date(time), function () {
     const payload = JSON.stringify({ title: "Reminder", body: message });
 
     webpush
@@ -69,9 +73,6 @@ app.post("/schedule-push", (req, res) => {
 
 // ///////////////////////////
 
-app.use(cors(corsOptions));
-app.use(bodyParser.json());
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/auth", authRoute);
 app.use("/blog", blogRoute);
